@@ -4,12 +4,12 @@ import HeaderImage from "../assets/hero/HeaderAnimated.svg";
 import curve from "../assets/hero/curve.png";
 
 import { BackgroundCircles, BottomLine, Gradient } from "./design/Hero";
-import { heroIcons } from "../constants";
-import { ScrollParallax } from "react-just-parallax";
+// import { heroIcons } from "../constants";
+// import { ScrollParallax } from "react-just-parallax";
 import { useRef } from "react";
 import Generating from "./Generating";
-import Notification from "./Notification";
-import Counter from "./Counter";
+// import Notification from "./Notification";
+
 
 const Hero = () => {
   const parallaxRef = useRef(null);
@@ -59,7 +59,7 @@ const Hero = () => {
                 />
                 <Generating className="hidden absolute left-4 right-4 bottom-5 md:left-1/2 md:right-auto md:bottom-8 md:w-[31rem] md:-translate-x-1/2" />
 
-                <ScrollParallax isAbsolutelyPositioned>
+                {/* <ScrollParallax isAbsolutelyPositioned>
                   <ul className="hidden absolute -left-[5.5rem] bottom-[7.5rem] px-1 py-1 bg-n-9/40 backdrop-blur border border-n-1/10 rounded-2xl xl:flex">
                     {heroIcons.map((icon, index) => (
                       <li className="p-5" key={index}>
@@ -67,21 +67,21 @@ const Hero = () => {
                       </li>
                     ))}
                   </ul>
-                </ScrollParallax>
-                <ScrollParallax isAbsolutelyPositioned>
+                </ScrollParallax> */}
+                {/* <ScrollParallax isAbsolutelyPositioned>
                   <Notification
                     className="hidden absolute -right-[5.5rem] bottom-[11rem] w-[18rem] xl:flex"
                     title="Voting System"
                   />
-                </ScrollParallax>
+                </ScrollParallax> */}
               </div>
             </div>
-            <Gradient className=" hidden " />
+            <Gradient className="  " />
           </div>
           
           <BackgroundCircles />
         </div>
-        <Counter className=" hidden  "/>
+      
       </div>
       <BottomLine />
     </Section>
