@@ -22,10 +22,6 @@ export const navigation = [
 ];
 
 
-import yourlogo from '../assets/Stats.png'
-export const counter = [yourlogo];
-
-
 import benefitIcon1 from '../assets/benefits/icon-1.svg'
 import benefitIcon2 from '../assets/benefits/icon-2.svg'
 import benefitIcon3 from '../assets/benefits/icon-3.svg'

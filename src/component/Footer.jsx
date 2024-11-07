@@ -24,27 +24,27 @@ const Footer = () => {
             <h5 className="h5 mb-8 text-center">Our Team</h5>
             <div className="flex flex-wrap justify-center gap-x-10">
               <div className="flex flex-col mb-6">
-                <a href="https://github.com/nakshatra" className="mb-4 flex items-center text-n-3">
+                <a href="https://github.com/NakshatraSirohi" className="mb-4 flex items-center text-n-3">
                   <Arrow /> Nakshatra
                 </a>
-                <a href="https://github.com/ritik" className="mb-4 flex items-center text-n-3">
+                <a href="https://github.com/" className="mb-4 flex items-center text-n-3">
                   <Arrow /> Ritik
                 </a>
-                <a href="https://github.com/prabhakar" className="mb-4 flex items-center text-n-3">
+                <a href="https://github.com/" className="mb-4 flex items-center text-n-3">
                   <Arrow /> Prabhakar
                 </a>
                
               </div>
 
               <div className="flex flex-col mb-6">
-              <a href="https://github.com/robin" className="mb-4 flex items-center text-n-3">
+              <a href="https://github.com/" className="mb-4 flex items-center text-n-3">
                   <Arrow /> Robin
                 </a>
                
-                <a href="https://github.com/namrata" className="mb-4 flex items-center text-n-3">
+                <a href="https://github.com/" className="mb-4 flex items-center text-n-3">
                   <Arrow /> Namrata
                 </a>
-                <a href="https://github.com/neha" className="mb-4 flex items-center text-n-3">
+                <a href="https://github.com/ItsNehaOjha" className="mb-4 flex items-center text-n-3">
                   <Arrow /> Neha Ojha
                 </a>
               </div>
