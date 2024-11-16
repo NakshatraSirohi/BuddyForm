@@ -4,29 +4,28 @@ import bcrypt from "bcryptjs";
 
 export const signup = async (req, res) => {
     try {
-        const { fullName, username, email, password, role } = req.body;
+        const { fullName, rollNo, email, password } = req.body;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         // Validate required fields
-        // if (!fullName || !username || !email || !password) {
-        //     return res.status(400).json({ error: "All fields are required" });
-        // }
+        if (!fullName || !rollNo || !email || !password) {
+            return res.status(400).json({ error: "All fields are required" });
+        }
+
+        // Validate roll number format
+        if (!/^2301430100\d{3}$/.test(rollNo)) {
+            return res.status(400).json({ error: "Invalid roll number format" });
+        }
 
         // Validate email format
         if (!emailRegex.test(email)) {
             return res.status(400).json({ error: "Invalid email format" });
         }
 
-        // Check for existing username
-        const existingUser = await User.findOne({ username });
+        // Check for existing roll number or email
+        const existingUser = await User.findOne({ $or: [{ rollNo }, { email }] });
         if (existingUser) {
-            return res.status(400).json({ error: "Username is already taken" });
-        }
-
-        // Check for existing email
-        const existingEmail = await User.findOne({ email });
-        if (existingEmail) {
-            return res.status(400).json({ error: "Email is already taken" });
+            return res.status(400).json({ error: "Roll number or email already exists" });
         }
 
         // Validate password length
@@ -38,75 +37,60 @@ export const signup = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Set default role as 'student' if no role is provided
-        const userRole = role || "student";
-
-        // Create a new user with the specified or default role
-        const newUser = new User({
-            fullName,
-            username,
-            email,
-            password: hashedPassword,
-            role: userRole, // Setting role in the user schema
-        });
-
-        // Save the new user and set cookie token
+        // Create and save the new user
+        const newUser = new User({ fullName, rollNo, email, password: hashedPassword });
         await newUser.save();
+
+        // Generate token and set cookie
         generateTokenSetCookie(newUser._id, res);
 
         // Send response with user data
         res.status(201).json({
             _id: newUser._id,
             fullName: newUser.fullName,
+            rollNo: newUser.rollNo,
             email: newUser.email,
-            role: newUser.role,
-            profileImg: newUser.profileImg,
-            coverImg: newUser.coverImg,
-            bio: newUser.bio,
-            link: newUser.link,
             createdAt: newUser.createdAt,
-            updatedAt: newUser.updatedAt,
         });
-
     } catch (error) {
         console.log("Error in signup controller:", error.message);
         res.status(500).json({ error: "Internal server error" });
     }
 };
-
 export const login = async (req, res) => {
-    try{
-         const {username,password}=req.body;
-         const user = await User.findOne({username});
-         const isPasswordCorrect = await bcrypt.compare(password,user?.password || "");
- 
-         if(!user || !isPasswordCorrect){
-             return res.status(400).json({error:"Invalid username or password"})
-         }
- 
-         generateTokenSetCookie(user._id,res);
- 
-         res.status(200).json({
-             _id: user._id,
-             fullName: user.fullName,
-            email: user.email,
-            role: user.role,
-            profileImg: user.profileImg,
-            coverImg: user.coverImg,
-            bio: user.bio,
-            link: user.link,
-            createdAt: user.createdAt,
-            updatedAt: user.updatedAt,
-         })
- 
-    }catch (error) {
-         console.log("Error in login controller", error.message);
-         res.status(500).json({ error: "Internal server error" });
-     }
- }
- 
+    try {
+        const { rollNo, password } = req.body;
 
- export const logout = async (req, res) => {
+        // Validate fields
+        if (!rollNo || !password) {
+            return res.status(400).json({ error: "Roll number and password are required" });
+        }
+
+        // Find user by roll number
+        const user = await User.findOne({ rollNo });
+        const isPasswordCorrect = await bcrypt.compare(password, user?.password || "");
+
+        if (!user || !isPasswordCorrect) {
+            return res.status(400).json({ error: "Invalid roll number or password" });
+        }
+
+        // Generate token and set cookie
+        generateTokenSetCookie(user._id, res);
+
+        // Respond with user data
+        res.status(200).json({
+            _id: user._id,
+            fullName: user.fullName,
+            rollNo: user.rollNo,
+            email: user.email,
+            createdAt: user.createdAt,
+        });
+    } catch (error) {
+        console.log("Error in login controller:", error.message);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
+export const logout = async (req, res) => {
     try{
         res.cookie("jwt", "", {maxAge:0})
         res.status(200).json({ message: "Logged out successfully" });
@@ -115,12 +99,17 @@ export const login = async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 }
-
-export const getMe = async (req,res) => {
-    try{
+export const getMe = async (req, res) => {
+    try {
+        // Find the user by their unique _id (which is guaranteed to be unique)
         const user = await User.findById(req.user._id).select("-password");
+        
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
         res.status(200).json(user);
-    }catch(error){
+    } catch (error) {
         console.log("Error in getMe controller", error.message);
         res.status(500).json({ error: "Internal server error" });
     }
