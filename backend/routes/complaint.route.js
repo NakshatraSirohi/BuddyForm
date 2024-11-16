@@ -1,5 +1,5 @@
 import express from "express";
-import { submitComplaint,updateComplaint,getNotifications , upvoteComplaint, deleteComplaintHard, getComplaintById ,getAllComplaints } from "../controllers/complaint.controller.js";
+import { submitComplaint,updateComplaint,upvoteComplaint, deleteComplaintHard, getComplaintById ,getAllComplaints } from "../controllers/complaint.controller.js";
 import { protectRoute } from "../middleware/protectRoute.js";
 
 const router = express.Router();
@@ -8,8 +8,6 @@ const router = express.Router();
 router.post("/create", protectRoute, submitComplaint);
 
 router.put("/:complaintId/update", protectRoute, updateComplaint);
-
-router.get("/notifications", protectRoute, getNotifications);
 
 // Route to upvote a complaint (PATCH instead of POST)
 router.post("/:id/upvote", protectRoute, upvoteComplaint);

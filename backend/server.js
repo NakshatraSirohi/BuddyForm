@@ -3,7 +3,8 @@ import dotenv from "dotenv";
 import {v2 as cloudinary} from "cloudinary";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.route.js";
-import complaintRoutes from "./routes/complaint.route.js"; 
+import complaintRoutes from "./routes/complaint.route.js";
+import notificationRoutes from "./routes/notification.route.js"  
 import connectMongoDB from "./db/connectMongoDB.js";
 
 dotenv.config();
@@ -19,11 +20,10 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Use routes for authentication
+// Use routes 
 app.use("/api/auth", authRoutes);
-
-// Use routes for complaints
 app.use("/api/complaints", complaintRoutes); 
+app.use("/api/notifications", notificationRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
