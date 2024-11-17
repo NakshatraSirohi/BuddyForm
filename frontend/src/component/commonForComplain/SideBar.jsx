@@ -6,13 +6,38 @@ import { IoNotifications } from "react-icons/io5";
 
 import { Link } from "react-router-dom";
 import { BiLogOut } from "react-icons/bi";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 const Sidebar = () => {
 	const data = {
 		rollNo: "2301420100153",
-		
-		
 	};
+	const queryClient = useQueryClient();
+	const {mutate:logout}=useMutation({
+		mutationFn:async() =>{
+			try{
+				const res = await fetch("/api/auth/logout", {
+					method:"POST",
+
+				})
+				const data = await res.json();
+				if(!res.ok){
+					throw new Error(data.error || "Something went wrong");
+				}
+			}catch(error){
+				throw new Error(error);
+			}
+		},
+		onSuccess: ()=>{
+			toast.success("Logout Successfully")
+			queryClient.invalidateQueries({queryKey: ["authUser"]});
+		},
+		onError: ()=>{
+			toast.error("LogOut failed");
+		}
+	});
+
 
 	return (
 		<div className='md:flex-[2_2_0] w-18 max-w-52'>
@@ -49,7 +74,10 @@ const Sidebar = () => {
 				</ul>
 				{data && (
 					<Link
-						to="/"
+					onClick={(e)=> {
+						e.preventDefault();
+						logout();
+					}} 
 						className='mt-auto mb-10 flex gap-2 items-start transition-all duration-300 hover:bg-[#181818] py-2 px-4 rounded-full'
 					>
 						<div className='avatar hidden md:inline-flex'>
@@ -61,7 +89,8 @@ const Sidebar = () => {
 							<div className='hidden md:block'>
 								<p className='text-white font-bold text-sm w-20 truncate'>LogOut</p>								
 							</div>
-							<BiLogOut className='w-5 h-5 cursor-pointer' />
+							<BiLogOut className='w-5 h-5 cursor-pointer'
+							/>
 						</div>
 					</Link>
 				)}
