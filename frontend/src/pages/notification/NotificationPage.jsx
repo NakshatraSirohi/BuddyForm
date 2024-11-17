@@ -1,5 +1,6 @@
 import LoadingSpinner from "../../component/commonForComplain/LoadingSpinner";
 import { IoSettingsOutline } from "react-icons/io5";
+import { FaThumbsUp, FaArrowUp } from "react-icons/fa";
 
 const NotificationPage = () => {
   const isLoading = false;
@@ -41,36 +42,51 @@ const NotificationPage = () => {
           </ul>
         </div>
       </div>
+
+      {/* Loading State */}
       {isLoading && (
         <div className="flex justify-center h-full items-center">
           <LoadingSpinner size="lg" />
         </div>
       )}
+
+      {/* No Notifications */}
       {notifications?.length === 0 && (
         <div className="text-center p-4 font-bold">No notifications 🤔</div>
       )}
+
+      {/* Notifications List */}
       {notifications?.map((notification) => (
         <div className="border-b border-gray-700" key={notification._id}>
-          <div className="flex gap-2 p-4">
+          <div className="flex gap-2 p-4 items-center">
+            {/* Icons Based on Notification Type */}
             {notification.type === "upvote" && (
-              <div className="flex gap-1">
-                <span className="font-bold text-info">{notification.rollNo}</span> upvoted
-                your complaint:{" "}
-                <span className="text-info">
-                  {notification.complainTitle}
-                </span>
-              </div>
+              <FaThumbsUp className="w-7 h-7 text-blue-500" />
             )}
             {notification.type === "statusUpdate" && (
-              <div className="flex gap-1">
-                Complaint{" "}
-                <span className="text-secondary">
-                  {notification.complainTitle}
-                </span>{" "}
-                status updated to{" "}
-                <span className="font-bold">{notification.severity}</span>
-              </div>
+              <FaArrowUp className="w-7 h-7 text-green-500" />
             )}
+
+            {/* Notification Text */}
+            <div>
+              {notification.type === "upvote" && (
+                <div className="flex gap-1">
+                  <span className="font-bold text-info">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@{notification.rollNo}</span>{" "}
+                  upvoted your complaint:{" "}
+                  <span className="text-info">{notification.complainTitle}</span>
+                </div>
+              )}
+              {notification.type === "statusUpdate" && (
+                <div className="flex gap-1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  Complaint{" "}
+                  <span className="text-secondary">
+                    {notification.complainTitle}
+                  </span>{" "}
+                  status updated to{" "}
+                  <span className="font-bold">{notification.severity}</span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       ))}
