@@ -1,5 +1,5 @@
-import curve1 from '../../assets/collaboration/curve-1.svg'
-import curve2 from '../../assets/collaboration/curve-2.svg'
+import curve1 from '../../assets/notesIcon/curve-1.svg'
+import curve2 from '../../assets/notesIcon/curve-2.svg'
 export const RightCurve = () => {
   return (
     <div className="hidden absolute top-1/2 left-full w-[10.125rem] -mt-1 ml-10 pointer-events-none xl:block">

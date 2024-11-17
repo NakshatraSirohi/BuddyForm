@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 import { fontFamily } from "tailwindcss/defaultTheme";
 import plugin from "tailwindcss/plugin";
+import daisyui from "daisyui";
 
 export default {
   content: [
@@ -12,8 +13,8 @@ export default {
     extend: {
       keyframes: {
         slideUp: {
-          '0%': { transform: 'translateY(20px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
+          "0%": { transform: "translateY(20px)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
         },
         zoomIn: {
           "0%": { transform: "scale(0.5)", opacity: "0" },
@@ -21,8 +22,8 @@ export default {
         },
       },
       animation: {
-        zoomIn: "zoomIn 1s ease-out forwards", 
-        slideUp: 'slideUp 0.5s ease-out forwards',
+        zoomIn: "zoomIn 1s ease-out forwards",
+        slideUp: "slideUp 0.5s ease-out forwards",
       },
       colors: {
         color: {
@@ -98,6 +99,7 @@ export default {
     },
   },
   plugins: [
+    daisyui, // Include daisyUI plugin
     plugin(function ({ addBase, addComponents, addUtilities }) {
       addBase({});
       addComponents({
@@ -153,4 +155,32 @@ export default {
       });
     }),
   ],
+  daisyui: {
+    themes: [
+      {
+        mytheme: {
+          primary: "#581c87",
+          "primary-content": "#dbd1e8",
+          secondary: "#00a2c6",
+          "secondary-content": "#000a0e",
+          accent: "#0095ad",
+          "accent-content": "#00080b",
+          neutral: "#130806",
+          "neutral-content": "#cac6c5",
+          "base-100": "#0e0c15",
+          "base-200": "#0b0911",
+          "base-300": "#07060c",
+          "base-content": "#c8c7ca",
+          info: "#d946ef",
+          "info-content": "#000b16",
+          success: "#00c357",
+          "success-content": "#000e03",
+          warning: "#f59e0b",
+          "warning-content": "#150900",
+          error: "#e11d48",
+          "error-content": "#ffd8d9",
+        },
+      },
+    ],
+  },
 };

@@ -14,8 +14,8 @@ export const notificationImages = [notification4, notification3, notification2];
 
 export const navigation = [
   { id: 0, title: "Home", url: "/" },
-  { id: 1, title: "Complain", url: "/complain" },
-  { id: 2, title: "DashBoard", url: "/dashboard" }, 
+  { id: 1, title: "Notes", url: "/notes" },
+  { id: 2, title: "RoadMap", url: "/roadmap" }, 
   { id: 3, title: "Contact", url: "/contact" },
   { id: 4, title: "New account", url: "#signup", onlyMobile: true },
   { id: 5, title: "Sign in", url: "#login", onlyMobile: true },
@@ -50,21 +50,21 @@ export const benefits = [
     },
     {
       id: "2",
-      title: "Features",
-      text: "Explore a variety of features designed to enhance your student experience, from easy note sharing to a streamlined complaint system.",
+      title: "RoadMap",
+      text: "Explore our initiatives, future plans, and key milestones. Our roadmap outlines ongoing projects, upcoming features, and implementation timelines.",
       backgroundUrl: "./src/assets/benefits/card-3.svg",
       iconUrl: benefitIcon3,
       imageUrl: benefitImage2,
-      light:true,
-      buttonText: "Discover Features", 
+      light: true,
+      buttonText: "View Roadmap", 
     },
   ];
   
 
-  export const collabText = 
+  export const notesText = 
   "Effortlessly access, share, and collaborate on course notes, providing a seamless academic resource hub for students.";
 
-  export const collabContent = [
+  export const notesContent = [
     {
       id: "0",
       title: "Access a vast library of course notes and materials with ease.",
@@ -84,80 +84,80 @@ export const benefits = [
     },
   ];
 
-  import msgg from '../assets/collaboration/msgg.svg';
-  import notion from '../assets/collaboration/notion.png';
-  import discord from '../assets/collaboration/discord.png';
-  import discuss from '../assets/collaboration/discuss.svg';
-  import files from '../assets/collaboration/userProIcon.svg';
-  import userProIcon from '../assets/collaboration/msgg.svg';
-  import codeBlock from '../assets/collaboration/codeBlock.svg';
-  import helpCenter from '../assets/collaboration/helpCenter.svg';
+  import pythonIcon from '../assets/notesIcon/pythonIcon.png';
+  import c from '../assets/notesIcon/c.png';
+  import sql from '../assets/notesIcon/sql.png';
+  import jsIcon from '../assets/notesIcon/javascriptIcon.png';
+  import  htmlIcon from '../assets/notesIcon/html.png';
+  import viteIcon from '../assets/notesIcon/vite.svg';
+  import javaIcon from '../assets/notesIcon/javaIcon.svg';
+  import helpCenter from '../assets/notesIcon/helpCenter.svg';
 
   
-  export const collabApps = [
+  export const notesApps = [
     {
       id: "0",
-      title: "Feedback",
-      icon: msgg, 
+      title: "Python Notes",
+      icon: pythonIcon, 
       width: 36,
-      height: 26,
-      url: "/contact", 
+      height: 36,
+      url: "/notes/python", 
     },
     {
       id: "1",
-      title: "Notion",
-      icon: notion,
-      width: 34,
+      title: "Java Notes",
+      icon: javaIcon, 
+      width: 36,
       height: 36,
-      url: "https://www.notion.so", 
+      url: "/notes/java",
     },
     {
       id: "2",
-      title: "Discord",
-      icon: discord,
+      title: "JavaScript Notes",
+      icon: jsIcon, 
       width: 36,
-      height: 28,
-      url: "https://discord.com", 
+      height: 36,
+      url: "/notes/javascript", 
     },
     {
       id: "3",
-      title: "Notes",
-      icon: discuss,
+      title: "HTML Notes",
+      icon: htmlIcon, 
       width: 36,
       height: 36,
-      url: "/notes", 
+      url: "/notes/react",
     },
     {
       id: "4",
-      title: "Documents",
-      icon: files, 
-      width: 34,
-      height: 34,
-      url: "/documents", 
+      title: "Vite Notes",
+      icon: viteIcon, 
+      width: 36,
+      height: 36,
+      url: "/notes/vite", 
     },
     {
       id: "5",
-      title: "User Profiles",
-      icon: userProIcon, 
-      width: 34,
-      height: 34,
-      url: "/profiles", 
+      title: "helpCenter",
+      icon: helpCenter, 
+      width: 36,
+      height: 36,
+      url: "/notes/nodejs", 
     },
     {
       id: "6",
-      title: "Code Block",
-      icon: codeBlock, 
-      width: 26,
-      height: 26,
-      url: "/code-block", 
+      title: "Course Notes",
+      icon: c,
+      width: 36,
+      height: 36,
+      url: "/notes/html-css", 
     },
     {
       id: "7",
-      title: "Help Center",
-      icon: helpCenter, 
-      width: 34,
-      height: 34,
-      url: "/help",   
+      title: "SQL Notes",
+      icon: sql, 
+      width: 36,
+      height: 36,
+      url: "/notes/database", 
     },
   ];
   

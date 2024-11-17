@@ -6,11 +6,13 @@ const Dashboard = () => {
       <Section>
         <div className="container">
         <Heading
-          title="Your DashBoard"
-          text="Your complain satus."
+          title="Your Notes"
+          text="Coming Soon"
         />
+        
+        <progress className="progress w-516 bg-white"></progress>
         </div>
-      </Section>
+          </Section>
     );
   };
   

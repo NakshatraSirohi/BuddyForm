@@ -28,8 +28,8 @@ const Benefits = () => {
                 <h5 className="h5 mb-5">{item.title}</h5>
                 <p className="body-2 mb-6 text-n-3">{item.text}</p>
                 <div className="flex items-center mt-auto">
-                  {/* Link to corresponding page */}
-                  <Link to={item.id === "0" ? "/complain" : item.id === "1" ? "/notes" : "/features"}>
+                  
+                  <Link to={item.id === "0" ? "/complain" : item.id === "1" ? "/notes" : "/roadmap"}>
                     <img
                       className="cursor-pointer"
                       src={item.iconUrl}
@@ -43,7 +43,7 @@ const Benefits = () => {
                     {item.buttonText}
                   </p>
                   
-                  <Link to={item.id === "0" ? "/complain" : item.id === "1" ? "/notes" : "/features"}>
+                  <Link to={item.id === "0" ? "/complain" : item.id === "1" ? "/notes" : "/roadmap"}>
                     <Arrow className="cursor-pointer" />
                   </Link>
                 </div>
