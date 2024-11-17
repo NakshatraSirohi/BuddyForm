@@ -1,29 +1,80 @@
-import { FaThumbsUp } from "react-icons/fa";  // Thumbs up icon for upvote
-import { useState } from "react";
-import PropTypes from "prop-types"; // Import PropTypes
+/* eslint-disable react/prop-types */
+import { FaThumbsUp } from "react-icons/fa";
+import {  useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-hot-toast";
 
+
+
+// eslint-disable-next-line react/prop-types
 const OComplain = ({ complaint }) => {
-  const [isLiked, setIsLiked] = useState(false); 
+
+  const queryClient = useQueryClient();
+
+  const {mutate:upvoteC, isPending:isUpvoting} = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(`api/complaints/${complaint._id}/upvote`, {
+        method: "POST",
+      });
+      
+      const data = await res.json();
+      console.log("Fetched Complaints:", data);
+    
+      if (!res.ok) {
+        throw new Error(data.error || "Something went wrong");
+      }
+      return data;
+    },
+    
+    onSuccess: (data) =>{
+      queryClient.setQueryData(["complaints"], (oldData) => {
+        const complaints = Array.isArray(oldData) ? oldData : [];
+
+        return complaints.map((p) => {
+          if (p._id === complaint._id) {
+            return {
+              ...p,
+              upvotes: data.updatedUpvotes || [],  // Ensure updatedUpvotes is used here
+            };
+          }
+          return p;
+        });
+      });
+      
+    },
+    onError:(error) =>{
+			toast.error(error.message)
+		}
+  })
+  const {data:authUser} = useQuery({queryKey: ["authUser"]});
+  const isUpvoted = (complaint.upvote || []).includes(authUser?._id);
+
 
   // Handle upvote
   const handleUpvote = () => {
-    setIsLiked((prevState) => !prevState); 
+    if(isUpvoting) return;
+    upvoteC();
   };
+
+  // Ensure likes is always an array
+  const likesCount = (complaint.upvotes || []).length;
 
   return (
     <div className="p-7 border-b border-gray-700 flex flex-col gap-7">
-    
-      <div className="font-bold text-xl text-center text-info">{complaint.title}</div>
-      
-      <div className="text-md text-center">{complaint.description}</div>
+      {/* Use complainText instead of title */}
+      <div className="font-bold text-xl text-center text-info">
+        {complaint.title}
+      </div>
+      <div className="text-md text-center">
+        {complaint.complainText || 'No description available'} {/* Using complainText */}
+      </div>
       
       {/* Categories and Severity in the same row */}
       <div className="flex justify-between items-center text-sm text-secondary">
         <div>
-          <strong>Severity:</strong> {complaint.severity}
+          <strong>Severity:</strong> {complaint.severity || 'Not available'}
         </div>
         <div>
-          <strong>Category:</strong> {complaint.category}
+          <strong>Category:</strong> {complaint.category || 'Not available'} {/* Handle category properly */}
         </div>
       </div>
 
@@ -39,11 +90,11 @@ const OComplain = ({ complaint }) => {
       {/* Upvote Section */}
       <div className="flex gap-2 justify-center items-center mt-3">
         <button
-          className={`flex items-center gap-1 text-lg ${isLiked ? 'text-blue-500' : 'text-gray-500'}`}
+          className={`flex items-center gap-1 text-lg ${isUpvoted? 'text-blue-500' : 'text-gray-500'}`}
           onClick={handleUpvote}
         >
           <FaThumbsUp className="w-7 items-center h-7" />
-          <span>{complaint.likes.length + (isLiked ? 1 : 0)}</span>
+          <span>{likesCount}</span>
         </button>
       </div>
     </div>
@@ -51,20 +102,6 @@ const OComplain = ({ complaint }) => {
 };
 
 // Adding PropTypes for validation
-OComplain.propTypes = {
-  complaint: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    severity: PropTypes.string.isRequired,  // Validating severity
-    category: PropTypes.string.isRequired,  // Validating category
-    img: PropTypes.string,  // Optional image field
-    user: PropTypes.shape({
-      rollNo: PropTypes.string.isRequired,
-      profileImg: PropTypes.string,
-    }).isRequired,
-    likes: PropTypes.arrayOf(PropTypes.string).isRequired,  // Likes is an array of strings (user IDs)
-  }).isRequired,
-};
+
 
 export default OComplain;
