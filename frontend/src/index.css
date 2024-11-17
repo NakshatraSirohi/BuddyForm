@@ -23,9 +23,7 @@
 
 @layer components {
     input::placeholder {
-      @apply text-gray-400; 
-      margin: 7rem;
-      margin-left: 12rem;
+      @apply text-gray-400;      
       font-size: small;
     }
   

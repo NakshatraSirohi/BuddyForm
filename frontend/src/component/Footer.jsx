@@ -13,7 +13,7 @@ const Footer = () => {
           <a href="#hero">
             <img src={MainLogo} width={230} height={28} alt="Buddy Forum Logo" />
           </a>
-          <Button className="w-[12rem] mb-6 mt-5" white>
+          <Button className="w-[12rem] mb-6 mt-5" white href="/app" >
             App Link
           </Button>
         </div>

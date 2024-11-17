@@ -1,13 +1,13 @@
 import fevicon1 from "../assets/fevicon1.png";
 import check from "../assets/check.svg";
-import { collabApps, collabContent, collabText } from "../constants";
+import { notesApps, notesContent, notesText } from "../constants";
 import Button from "./Button";
 import Section from "./Section";
-import { LeftCurve, RightCurve } from "./design/Collaboration";
+import { LeftCurve, RightCurve } from "./design/NotesTools";
 
 const Collaboration = () => {
   return (
-    <Section crosses id="notes">
+    <Section crosses id="features">
       <div className="container lg:flex">
         <div className="max-w-[25rem]">
           <h2 className="h2 mb-4 md:mb-8 ml-3">
@@ -15,7 +15,7 @@ const Collaboration = () => {
           </h2>
 
           <ul className="max-w-[22rem] mb-10 md:mb-14 ml-3">
-            {collabContent.map((item) => (
+            {notesContent.map((item) => (
               <li className="mb-3 py-3" key={item.id}>
                 <div className="flex items-center">
                   <img src={check} width={24} height={24} alt="check" />
@@ -26,12 +26,12 @@ const Collaboration = () => {
             ))}
           </ul>
 
-          <Button href="/buy-notes">Buy Notes</Button>
+          <Button href="/notes">Buy Notes</Button>
         </div>
 
         <div className="lg:ml-auto xl:w-[38rem] mt-4">
           <p className="body-2 mb-8 text-n-2 md:mb-16 lg:mb-32 lg:w-[22rem] lg:mx-auto">
-            {collabText}
+            {notesText}
           </p>
 
           <div className="relative left-1/2 flex w-[22rem] aspect-square border border-n-6 rounded-full -translate-x-1/2 scale:75 md:scale-100">
@@ -41,14 +41,14 @@ const Collaboration = () => {
                   <img
                     className="w-full h-full object-cover rounded-full"
                     src={fevicon1}
-                    alt="brainwave"
+                    alt="buddyForum"
                   />
                 </div>
               </div>
             </div>
 
             <ul>
-              {collabApps.map((app, index) => (
+              {notesApps.map((app, index) => (
                 <li
                   key={app.id}
                   className={`absolute top-0 left-1/2 h-1/2 -ml-[1.6rem] origin-bottom rotate-${

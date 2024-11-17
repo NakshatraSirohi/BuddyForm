@@ -42,7 +42,7 @@ const Hero = () => {
           <p className="body-1 max-w-3xl mx-auto mb-6 text-n-2 lg:mb-8 animate-slideUp">
             We lets you raise concerns, vote on issues, track progress, and
             more. <br /> Be heard and make a difference at your college. <br />
-            Effortlessly raise your concerns, get timely responses, <br /> and make a positive impact in your college community
+            {/* Effortlessly raise your concerns, get timely responses, <br /> and make a positive impact in your college community */}
           </p>
           <Button href="/complain" className='animate-slideUp' white>
           Submit a Complaint

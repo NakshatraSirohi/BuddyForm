@@ -1,12 +1,12 @@
-import Button from "./Button";
-import Heading from "./Heading";
-import Section from "./Section";
-import Tagline from "./Tagline";
+import Button from "../component/Button";
+import Heading from "../component/Heading";
+import Section from "../component/Section";
+import Tagline from "../component/Tagline";
 import { roadmap } from "../constants";
 import check2 from '../assets/roadmap/check-02.svg'
 import grid from '../assets/grid.png';
 import loading1 from '../assets/loading.png';
-import { Gradient } from "./design/Roadmap";
+import { Gradient } from "../component/design/Roadmap";
 
 const Roadmap = () => (
   <Section crosses className="overflow-hidden" id="feedback">
@@ -71,7 +71,7 @@ const Roadmap = () => (
       </div>
 
       <div className="flex justify-center mt-12 md:mt-15 xl:mt-20">
-        <Button href="/roadmap"> Give Your FeedBack</Button>
+        <Button href="/contact"> Give Your FeedBack</Button>
       </div>
     </div>
   </Section>

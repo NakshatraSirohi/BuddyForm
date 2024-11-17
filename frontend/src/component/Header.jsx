@@ -68,13 +68,13 @@ const Header = () => {
         </nav>
 
         <Link
-          to="#signup" // Change href to to
+          to="/signup" 
           className="button hidden mr-8 text-white transition-colors hover:text-color-1 lg:block"
         >
           New account
         </Link>
-        <Button className="hidden lg:flex" href="#login">
-          Sign in
+        <Button className="hidden lg:flex" href="/login">
+          Login
         </Button>
 
         <Button
