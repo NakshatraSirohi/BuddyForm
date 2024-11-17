@@ -6,8 +6,8 @@ import Login from "./pages/auth/LoginPage";
 import SignUp from "./pages/auth/SignUp";
 import Complain from "./pages/complain/Complain";
 import Contact from "./pages/Contact";
-import DashBoard from "./pages/complain/DashBoard";
-import Notification from "./pages/complain/Notification";
+
+import Notification from "./pages/notification/NotificationPage";
 import Notes from "./pages/Notes";
 import AppLink from "./pages/AppLink";
 import Roadmap from "./pages/Roadmap";
@@ -25,7 +25,7 @@ const App = () => {
   // Define routes where the header and footer should be hidden
   const hideHeaderRoutes = ["/login", "/signup"];
   const hideFooterRoutes = ["/login", "/signup"];
-  const sidebarRoutes = ["/complain", "/notifications", "/dashboard"];
+  const sidebarRoutes = ["/complain", "/notification", "/yourComplain"];
 
   return (
     <>
@@ -41,7 +41,7 @@ const App = () => {
               <Routes>
                 <Route path="/complain" element={<Complain />} />
                 <Route path="/notification" element={<Notification/>} />
-                <Route path="/dashboard" element={<DashBoard/>} />
+             
               </Routes>
             </div>
           </div>
@@ -57,7 +57,6 @@ const App = () => {
               <Route path="/login" element={<Login />} /> {/* Login page */}
               <Route path="/signup" element={<SignUp />} /> {/* Signup page */}
               <Route path="/contact" element={<Contact />} /> {/* Contact page */}
-              <Route path="/dashboard" element={<DashBoard />} /> {/* Dashboard page */}
               <Route path="/notes" element={<Notes />} /> {/* Notes page */}
               <Route path="/app" element={<AppLink />} /> {/* App page */}
               <Route path="/roadmap" element={<Roadmap />} /> {/* Roadmap page */}

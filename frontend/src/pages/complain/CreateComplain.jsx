@@ -102,7 +102,7 @@ const CreateComplain = () => {
                     <li key={index}>
                       <a
                         onClick={(e) => {
-                          e.stopPropagation(); // Prevent parent click
+                          e.stopPropagation(); 
                           handleCategorySelect(category); // Add selected category
                         }}
                       >
@@ -113,7 +113,7 @@ const CreateComplain = () => {
                   <li>
                     <a
                       onClick={(e) => {
-                        e.stopPropagation(); // Prevent parent click
+                        e.stopPropagation(); 
                         handleCategorySelect("Other"); // Select "Other"
                       }}
                     >

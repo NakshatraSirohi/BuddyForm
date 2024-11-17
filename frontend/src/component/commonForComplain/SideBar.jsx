@@ -3,7 +3,7 @@ import MainLogo from '../../assets/complainLogon/MainLogo.png';
 import smallLogo from '../../assets/loginImg/loginImg.png'
 import { MdHomeFilled } from "react-icons/md";
 import { IoNotifications } from "react-icons/io5";
-import { FaUser } from "react-icons/fa";
+
 import { Link } from "react-router-dom";
 import { BiLogOut } from "react-icons/bi";
 
@@ -28,7 +28,7 @@ const Sidebar = () => {
 				<ul className='flex flex-col gap-3 mt-4'>
 					<li className='flex justify-center md:justify-start'>
 						<Link
-							to='/'
+							to='/complain'
 							className='flex gap-3 items-center hover:bg-stone-900 transition-all rounded-full duration-300 py-2 pl-2 pr-4 max-w-fit cursor-pointer'
 						>
 							<MdHomeFilled className='w-8 h-8' />
@@ -37,7 +37,7 @@ const Sidebar = () => {
 					</li>
 					<li className='flex justify-center md:justify-start'>
 						<Link
-							to='/notifications'
+							to='/notification'
 							className='flex gap-3 items-center hover:bg-stone-900 transition-all rounded-full duration-300 py-2 pl-2 pr-4 max-w-fit cursor-pointer'
 						>
 							<IoNotifications className='w-6 h-6' />
@@ -45,15 +45,7 @@ const Sidebar = () => {
 						</Link>
 					</li>
 
-					<li className='flex justify-center md:justify-start'>
-						<Link
-							to={`/dashboard`}
-							className='flex gap-3 items-center hover:bg-stone-900 transition-all rounded-full duration-300 py-2 pl-2 pr-4 max-w-fit cursor-pointer'
-						>
-							<FaUser className='w-6 h-6' />
-							<span className='text-lg hidden md:block'>DashBoard</span>
-						</Link>
-					</li>
+				
 				</ul>
 				{data && (
 					<Link

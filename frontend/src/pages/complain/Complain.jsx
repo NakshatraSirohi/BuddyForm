@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import Posts from "../../component/commonForComplain/OtherComplaints";
+import OtherComplaints from "../../component/commonForComplain/OtherComplaints";
 import CreatePost from "./CreateComplain";
 
 const Complain = () => {
@@ -33,11 +33,11 @@ const Complain = () => {
 					</div>
 				</div>
 
-				{/*  CREATE POST INPUT */}
+				
 				<CreatePost />
 
-				{/* POSTS */}
-				<Posts />
+				
+				<OtherComplaints feedType={feedType} />
 			</div>
 		</>
 	);
