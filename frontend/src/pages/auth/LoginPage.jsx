@@ -4,6 +4,7 @@ import fevicon1 from "../../assets/loginImg/loginImg.png";
 import { FaUser } from "react-icons/fa";
 import { MdPassword } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { useMutation,useQueryClient } from "@tanstack/react-query";
 
 const LoginPage = () => {
 	const [formData, setFormData] = useState({
@@ -11,16 +12,40 @@ const LoginPage = () => {
 		password: "",
 	});
 
+	const queryClient = useQueryClient();
+	const {mutate:loginMutation,isPending, isError, error} = useMutation({
+		mutationFn:async({rollNo, password})=>{
+			try{
+				const res = await fetch("/api/auth/login", {
+					method:"POST",
+					headers:{
+						"Content-type": "application/json",
+					},
+					body:JSON.stringify({rollNo,password}),
+				});
+				const data = await res.json();
+				if(!res.ok){
+					throw new Error(data.error || "Could not login");
+				}
+			}catch(error){
+				throw new Error(error);
+			}
+		},
+		onSuccess:() =>{
+			//refatch the auth user 
+			queryClient.invalidateQueries({queryKey: ["authUser"]});
+		}
+	});
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log(formData);
+		loginMutation(formData)
 	};
 
 	const handleInputChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
-	const isError = false;
 
 	return (
 		<div className='max-w-screen-xl mx-auto mt-0 flex h-screen px-10'>
@@ -50,7 +75,7 @@ const LoginPage = () => {
 							placeholder='Roll No'
 							name='rollNo'
 							onChange={handleInputChange}
-							value={formData.username}
+							value={formData.rollNo}
 						/>
 					</label>
 
@@ -65,10 +90,12 @@ const LoginPage = () => {
 							value={formData.password}
 						/>
 					</label>
-                    <Button href="/complain" className='animate-slideUp' white>
-                        Login 
+                    <Button  className='animate-slideUp' white>
+						{isPending? "Loading" : "Login"}
                     </Button>
-                    {isError && <p className='text-red-500'>Something went wrong</p>}
+                    {isError && <p className='text-red-500'>{
+						error.message
+					}</p>}
 					<p className='text-white text-lg'>{"Don't"} have an account?</p>
                     <Button href="/signup" className='animate-slideUp' >
                         Sign Up

@@ -1,4 +1,4 @@
-import background  from "../../assets/background.jpeg";
+import background  from "../../assets/hero/backgroundImg.jpeg";
 
 export const Rings = () => {
   return (

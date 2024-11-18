@@ -1,5 +1,5 @@
-import fevicon1 from "../assets/fevicon1.png";
-import check from "../assets/check.svg";
+import fevicon1 from "../assets/notesIcon/fevicon1forNotes.png";
+import check from "../assets/notesIcon/check.svg";
 import { notesApps, notesContent, notesText } from "../constants";
 import Button from "./Button";
 import Section from "./Section";

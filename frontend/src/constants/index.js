@@ -1,16 +1,4 @@
 
-import homeSmile from '../assets/parallox/home-smile.svg';
-import file02 from '../assets/parallox/file-02.svg';
-import searchMd from '../assets/parallox/search-md.svg';
-import plusSquare from '../assets//parallox/plus-square.svg';
-export const heroIcons = [homeSmile, file02, searchMd, plusSquare];
-
-
-import notification2 from "../assets/notification/image-2.png"
-import notification3 from "../assets/notification/image-3.png"
-import notification4 from "../assets/notification/image-4.png"
-export const notificationImages = [notification4, notification3, notification2];
-
 
 export const navigation = [
   { id: 0, title: "Home", url: "/" },
@@ -237,7 +225,7 @@ export const benefits = [
         { value: "Other", label: "Other" },
       ],
       required: true,
-      // Add a special flag to show "Other" input field conditionally
+     
       showOtherInput: true,
     },
     

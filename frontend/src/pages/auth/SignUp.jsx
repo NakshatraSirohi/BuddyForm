@@ -8,6 +8,9 @@ import { MdPassword } from "react-icons/md";
 import { MdDriveFileRenameOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
 
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+
 const SignUpPage = () => {
 	const [formData, setFormData] = useState({
 		email: "",
@@ -15,17 +18,40 @@ const SignUpPage = () => {
 		fullName: "",
 		password: "",
 	});
-
+	const { mutate , isError, isPending, error} = useMutation( { 
+		mutationFn : async( { email,rollNo , fullName, password})=>{
+			try{
+				const res = await fetch("/api/auth/signup", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ email, rollNo, fullName, password }),
+				});
+				const data = await res.json();
+				if(!res.ok) throw new Error(data.error || "Failed to create account");
+				console.log(data);
+				return data;
+			}catch(error){
+				console.error(error);
+				toast.error(error.message);
+				throw error ;
+			}
+		},
+		onSuccess: ()=>{
+			toast.success("Account created successfully");
+		}
+		
+	})
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log(formData);
+		mutate(formData);
 	};
 
 	const handleInputChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 
-	const isError = false;
 
 	return (
 		<div className='flex h-screen '>
@@ -64,10 +90,10 @@ const SignUpPage = () => {
 							<input
 								type='text'
 								className='grow'
-								placeholder='Roll No'
+								placeholder='Roll No in format: 2301430100___'
 								name='rollNo'
 								onChange={handleInputChange}
-								value={formData.username}
+								value={formData.rollNo}
 							/>
 						</label>
 						<label className='input border-n-1/10 rounded flex items-center gap-2 bg-n-8 flex-1'>
@@ -93,13 +119,13 @@ const SignUpPage = () => {
 							value={formData.password}
 						/>
 					</label>
-                    <Button href="/login" className='animate-slideUp' white>
-                        Sign Up
+                    <Button  className='animate-slideUp' white>
+						{isPending ? "Loading...": "Sign up"}
                     </Button>
-					{isError && <p className='text-red-500'>Something went wrong</p>}
+					{isError && <p className='text-red-500'>{error.message}</p>}
 
                     <p className='text-white text-lg'>Already have an account?</p>
-                    <Button href="/login" className='animate-slideUp' >
+                    <Button href="/login" className='animate-slideUp'>
                         Sign In
                     </Button>
 				</form>
