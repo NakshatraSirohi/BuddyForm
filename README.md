@@ -68,12 +68,12 @@ A project designed to empower students by providing an anonymous platform to voi
    ```  
 2. Install dependencies:  
    ```bash  
-   npm install nodejs express                # For Node.js-based backend  
+   npm install nodejs express 
    ```  
 
 3. Run the application:  
    ```bash  
-   npm run dev                   # For Node.js  
+   npm run dev
    ```  
 4. Open the application in your browser:  
    `http://localhost:3000`  
