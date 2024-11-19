@@ -81,7 +81,8 @@ A project designed to empower students by providing an anonymous platform to voi
 ### 📱 **Android App**:  
 1. Clone the repository:  
    ```bash  
-   git clone https://github.com/Robin-Kumar-rk/BuddyFormApp.git  
+   git clone https://github.com/Robin-Kumar-rk/BuddyFormApp.git
+   cd BuddyFormApp
    ```  
 2. Open the project in Android Studio.  
 3. Build and run the application on an emulator or any android device.  
@@ -100,4 +101,9 @@ A project designed to empower students by providing an anonymous platform to voi
   Allow students to upload images or record complaints.  
 
 ---  
+
+**Licensed**
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+---
 *Empowering students, fostering trust.*  
