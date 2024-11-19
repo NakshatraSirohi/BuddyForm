@@ -102,8 +102,7 @@ A project designed to empower students by providing an anonymous platform to voi
 
 ---  
 
-**Licensed**
-This project is licensed under the MIT License. See the LICENSE file for details.
+**Licensed**: This project is licensed under the MIT License. See the LICENSE file for details.
 
 ---
 *Empowering students, fostering trust.*  
