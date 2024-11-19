@@ -63,8 +63,8 @@ A project designed to empower students by providing an anonymous platform to voi
 ### 📦 **Web Application**:  
 1. Clone the repository:  
    ```bash  
-   git clone https://github.com/your-username/student-complaint-platform.git  
-   cd student-complaint-platform  
+   git clone https://github.com/NakshatraSirohi/BuddyForm.git  
+   cd BuddyForm
    ```  
 2. Install dependencies:  
    ```bash  
