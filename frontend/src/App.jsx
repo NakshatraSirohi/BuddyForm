@@ -37,7 +37,7 @@ const App = () => {
 				if(!res.ok){
 					throw new Error(data.error || "Something went wrong ");
 				}
-				console.log( "auth user is here : ", data);
+				// console.log( "auth user is here : ", data);
 				return data;
 			}catch(error){
 				throw new Error(error);

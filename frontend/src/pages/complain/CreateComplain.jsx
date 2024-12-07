@@ -3,32 +3,90 @@ import { BsEmojiSmileFill } from "react-icons/bs";
 import { useRef, useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import Button from "../../component/Button";
+import { useMutation,useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-hot-toast";
 
 const CreateComplain = () => {
-  const [text, setText] = useState("");
+  const [title, setTitle] = useState(""); 
+  const [text, setText] = useState(""); 
   const [img, setImg] = useState(null);
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [isOtherSelected, setIsOtherSelected] = useState(false);
-  const [otherCategory, setOtherCategory] = useState("");
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState([]); // State for selected categories
+  const [isOtherSelected, setIsOtherSelected] = useState(false); // State to track "Other" category selection
+  const [otherCategory, setOtherCategory] = useState(""); // State for "Other" category input
+  const [dropdownOpen, setDropdownOpen] = useState(false); // State to toggle dropdown visibility
   const imgRef = useRef(null);
-  const isPending = false;
-  const isError = false;
 
   const categories = [
     "General Issue",
-    "Technical Problem",
     "Service Complaint",
     "Late Response",
     "Facilities Issue",
-    "Behavioral Issue",
+    "academic",
+    "technical",
   ];
 
+  useQuery({queryKey : ["authUser"]})
+	const queryClient = useQueryClient();
+
+  const {
+    mutate: createComplaint,
+    isPending,
+    isError,
+  } = useMutation({
+    mutationFn: async ({ title, text, img, categories }) => {
+      try {
+        
+        const res = await fetch("/api/complaints/create", {
+          method: "POST",
+          
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ title, text, img, categories }),
+        });
+        
+        console.log("Response Status:", res.status); 
+        const data = await res.json();
+        console.log("Response Data:", data); // Log response data
+        if (!res.ok) {
+          throw new Error(data.error || "Something went wrong while submitting the complaint.");
+        }
+
+        return data;
+      } catch (error) {
+        throw new Error(error.message || "An error occurred.");
+      }
+    },
+
+    onSuccess: () => {
+      
+      setTitle(""); // Reset title input
+      setText(""); // Reset text input
+      setImg(null); // Reset image
+      setSelectedCategories([]);
+
+      toast.success("Complaint submitted successfully");
+      queryClient.invalidateQueries({ queryKey: ["complaints"] }); 
+    },
+
+    onError: () => {
+      
+      toast.error("Failed to submit the complaint, please try again.");
+    },
+  });
+
   const handleSubmit = (e) => {
-    e.preventDefault();
-    alert("Complaint submitted successfully");
-    // Save the complaint to your backend here
-  };
+    e.preventDefault(); 
+
+    createComplaint({
+        title,
+        text,
+        img,
+        categories: selectedCategories,
+
+    });
+};
+
 
   const handleImgChange = (e) => {
     const file = e.target.files[0];
@@ -44,25 +102,32 @@ const CreateComplain = () => {
   const handleCategorySelect = (category) => {
     if (category === "Other") {
       setIsOtherSelected(true);
-      setSelectedCategories([]); // Clear categories if "Other" is selected
+      setSelectedCategories([]); // Reset selected categories when 'Other' is selected
     } else {
       if (!selectedCategories.includes(category)) {
         setSelectedCategories([...selectedCategories, category]);
       }
+      setDropdownOpen(false); // Close the dropdown after selection
     }
-    setDropdownOpen(false); // Close dropdown after selection
   };
-
+  
   const handleOtherSubmit = () => {
     if (otherCategory.trim()) {
-      setSelectedCategories([...selectedCategories, otherCategory.trim()]);
-      setIsOtherSelected(false);
-      setOtherCategory("");
+      // Validate custom category
+      const validCategory = /^[a-zA-Z0-9\s]+$/.test(otherCategory.trim());  // Example of simple validation
+      if (validCategory) {
+        setSelectedCategories([...selectedCategories, otherCategory.trim()]);
+        setIsOtherSelected(false);
+        setOtherCategory("");
+      } else {
+        toast.error("Please enter a valid category.");
+      }
     }
   };
-
-  const removeCategory = (category) => {
-    setSelectedCategories(selectedCategories.filter((cat) => cat !== category));
+  
+  
+  const removeCategory = (categories) => {
+    setSelectedCategories(selectedCategories.filter((cat) => cat !== categories));
   };
 
   return (
@@ -73,12 +138,23 @@ const CreateComplain = () => {
         </div>
       </div>
       <form className="flex flex-col gap-2 w-full" onSubmit={handleSubmit}>
+        {/* Title Input Section */}
+        <input
+          type="text"
+          className="w-full p-2 mb-2  text-lg focus:outline-none border-b border-gray-800 bg-transparent placeholder-gray-500"
+          placeholder="Enter the title..."
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+
+        {/* Complaint Description */}
         <textarea
-          className="textarea w-full p-0 text-lg resize-none border-none focus:outline-none border-gray-800"
+          className="textarea w-full ml-2 p-0 text-lg resize-none border-none focus:outline-none border-gray-800"
           placeholder="Describe your complaint..."
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
+
         {/* Dropdown for categories */}
         <div
           className="dropdown flex border-t border-t-gray-700 mt-2 relative"
@@ -98,22 +174,22 @@ const CreateComplain = () => {
                   className="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 shadow absolute"
                   onClick={(e) => e.stopPropagation()} // Prevent dropdown from closing on internal clicks
                 >
-                  {categories.map((category, index) => (
+                  {categories.map((categories, index) => (
                     <li key={index}>
                       <a
                         onClick={(e) => {
-                          e.stopPropagation(); 
-                          handleCategorySelect(category); // Add selected category
+                          e.stopPropagation();
+                          handleCategorySelect(categories); // Add selected category
                         }}
                       >
-                        {category}
+                        {categories}
                       </a>
                     </li>
                   ))}
                   <li>
                     <a
                       onClick={(e) => {
-                        e.stopPropagation(); 
+                        e.stopPropagation();
                         handleCategorySelect("Other"); // Select "Other"
                       }}
                     >
@@ -145,17 +221,18 @@ const CreateComplain = () => {
             </div>
           )}
         </div>
+
         {/* Selected categories displayed as hashtags */}
         <div className="flex flex-wrap gap-2 mt-2">
-          {selectedCategories.map((category, index) => (
+          {selectedCategories.map((categories, index) => (
             <span
               key={index}
               className="bg-gray-700 text-white px-2 py-1 rounded-full flex items-center gap-1 text-sm"
             >
-              #{category}
+              #{categories}
               <IoCloseSharp
                 className="cursor-pointer"
-                onClick={() => removeCategory(category)}
+                onClick={() => removeCategory(categories)}
               />
             </span>
           ))}
@@ -180,7 +257,7 @@ const CreateComplain = () => {
         )}
 
         {/* Buttons */}
-        <div className="flex justify-between border-t  py-2 border-t-gray-700 mt-4">
+        <div className="flex justify-between border-t py-2 border-t-gray-700 mt-4">
           <div className="flex gap-1 items-center">
             <CiImageOn
               className="fill-info w-6 h-6 cursor-pointer"
@@ -188,8 +265,14 @@ const CreateComplain = () => {
             />
             <BsEmojiSmileFill className="fill-info w-5 h-5 cursor-pointer" />
           </div>
-          <input type="file" accept="image/*" hidden ref={imgRef} onChange={handleImgChange} />
-          <Button className="animate-slideUp" href="/complain">
+          <input
+            type="file"
+            accept="image/*"
+            hidden
+            ref={imgRef}
+            onChange={handleImgChange}
+          />
+          <Button className="animate-slideUp">
             {isPending ? "Submitting..." : "Submit Complaint"}
           </Button>
         </div>
