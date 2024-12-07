@@ -92,7 +92,7 @@ const OComplain = ({ complaint }) => {
           <strong>Severity:</strong> {complaint.severity || "Not available"}
         </div>
         <div>
-          <strong>Category:</strong> {complaint.category || "Not available"}
+          <strong>Category:</strong> {complaint.categories || "Not available"}
         </div>
       </div>
 

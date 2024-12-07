@@ -71,7 +71,7 @@ const NotificationPage = () => {
             <div>
               {notification.type === "upvote" && (
                 <div className="flex gap-1">
-                  <span className="font-bold text-info">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@{notification.rollNo}</span>{" "}
+                  <span className="font-bold text-info">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;someone</span>{" "}
                   upvoted your complaint:{" "}
                   <span className="text-info">{notification.complainTitle}</span>
                 </div>

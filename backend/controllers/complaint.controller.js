@@ -13,33 +13,41 @@ const getSeverityFromUpvotes = (upvotes) => {
 
 export const submitComplaint = async (req, res) => {
     try {
-        const { title, complainText, category, file } = req.body;
-        console.log("Received data:", req.body);
-        const userId = req.user._id; // Assuming user ID is attached to `req.user`
+        const { title, text, categories, file } = req.body;
+        console.log("Received data by controller:", req.body);
+        console.log(req.body.categories);
+        if (!req.user || !req.user._id) {
+            return res.status(401).json({ error: "Unauthorized: User information missing" });
+        }
+        const userId = req.user._id;
 
         // Validate user
         const user = await User.findById(userId);
         if (!user) return res.status(404).json({ message: "Invalid User to complain" });
 
-        // Ensure all required fields are provided
-        if (!complainText) return res.status(400).json({ error: "Complaint Text is required" });
+        // // Validate inputs
+        // if (!complainText) return res.status(400).json({ error: "Complaint Text is required" });
         if (!title) return res.status(400).json({ error: "Title is required" });
-        // if (!category) return res.status(400).json({ error: "Category is required" });
+        if (!categories) {
+            console.warn("categories is not provided; assigning default.");
+        }
 
-        // File upload (image/video/recording)
+        // File upload
         let uploadedFile = null;
         let fileType = null;
 
         if (file) {
+            console.log("Uploading file to Cloudinary...");
             try {
                 const result = await cloudinary.uploader.upload(file, {
-                    resource_type: "auto", // Automatically detect file type (image, video, etc.)
+                    resource_type: "auto", // Handles images, videos, etc.
                 });
-                uploadedFile = result.secure_url; // URL of the uploaded file
-                fileType = result.resource_type; // Type of the uploaded file (image, video, etc.)
+                console.log("Cloudinary upload result:", result);
+                uploadedFile = result.secure_url;
+                fileType = result.resource_type;
             } catch (uploadError) {
                 console.error("Cloudinary upload failed:", uploadError.message);
-                return res.status(500).json({ error: "File upload failed" });
+                return res.status(500).json({ error: "File upload failed. Please try again." });
             }
         }
 
@@ -47,38 +55,45 @@ export const submitComplaint = async (req, res) => {
         const newComplaint = new Complaint({
             user: userId,
             title,
-            complainText,
-            category,
-            severity: getSeverityFromUpvotes(0), // Default severity for new complaints
+            complainText: text,
+            categories: categories[0],
+            severity: getSeverityFromUpvotes(0), // Default severity
             attachments: uploadedFile ? [{ fileUrl: uploadedFile, fileType }] : [],
         });
 
         await newComplaint.save();
 
-        const statusNotification = new Notification({
+        // Create and send notifications
+        const notifyRecipients = [userId]; // Adjust logic for admins, HOD, etc.
+        const notifications = notifyRecipients.map((recipient) => ({
             from: userId,
-            to: userId, // This could be the admin or relevant user who needs to be notified
+            to: recipient,
             complaint: newComplaint._id,
             message: `Complaint titled "${title}" has been submitted.`,
             type: 'status',
-        });
-        await statusNotification.save();
+        }));
+        await Notification.insertMany(notifications);
 
+        // Respond to client
         res.status(201).json({
             message: "Complaint submitted successfully",
             complaint: newComplaint,
         });
     } catch (error) {
-        
+        if (error.name === "ValidationError") {
+            console.error("Validation Error:", error.message);
+            return res.status(400).json({ error: "Validation error: " + error.message });
+        }
         console.error("Error in submitComplaint controller:", error.message);
         res.status(500).json({ error: "Internal server error" });
     }
 };
 
+
 export const updateComplaint = async (req, res) => {
     try {
         const { complaintId } = req.params;
-        const { title, complainText, category } = req.body;
+        const { title, complainText, categories } = req.body;
 
         const complaint = await Complaint.findById(complaintId);
         if (!complaint || complaint.user.toString() !== req.user._id.toString()) {
@@ -87,7 +102,7 @@ export const updateComplaint = async (req, res) => {
 
         complaint.title = title || complaint.title;
         complaint.complainText = complainText || complaint.complainText;
-        complaint.category = category || complaint.category;
+        complaint.categories = categories || complaint.categories;
 
         await complaint.save();
 
@@ -164,7 +179,7 @@ export const getUserComplaints = async (req, res) => {
         const userId = req.user._id;
 
         const userComplaints = await Complaint.find({ user: userId, isDeleted: false })
-            .sort({ createdAt: -1 });
+    .sort({ createdAt: -1 });
 
         res.status(200).json({ complaints: userComplaints });
     } catch (error) {
@@ -196,34 +211,26 @@ export const getComplaintById = async (req, res) => {
 
 export const getAllComplaints = async (req, res) => {
     try {
-        const { page = 1, limit = 10, title, category, status, severity } = req.query;
+        const { title, categories, status, severity } = req.query;
 
+        // Build the filter for complaints
         let filter = { isDeleted: false };
 
-        if (title) filter.title = { $regex: title, $options: 'i' }; // Case-insensitive search
-        if (category) filter.category = category;
+        if (title) filter.title = { $regex: title, $options: "i" }; // Case-insensitive search
+        if (categories) filter.categories = categories;
         if (status) filter.status = status;
         if (severity) filter.severity = severity;
 
-        const complaints = await Complaint.find(filter)
-            .skip((page - 1) * limit)
-            .limit(parseInt(limit))
-            .sort({ createdAt: -1 });
+        // Fetch complaints without pagination, sorted by newest first
+        const complaints = await Complaint.find(filter).sort({ createdAt: -1 })
 
-        const totalComplaints = await Complaint.countDocuments(filter);
-
-        res.status(200).json({
-            totalComplaints,
-            currentPage: parseInt(page),
-            totalPages: Math.ceil(totalComplaints / limit),
-            complaints,
-
-        });
+        res.status(200).json({ complaints });
     } catch (error) {
         console.log("Error in getAllComplaints controller:", error.message);
         res.status(500).json({ error: "Internal server error" });
     }
 };
+
 export const deleteComplaintHard = async (req, res) => {
     try {
         

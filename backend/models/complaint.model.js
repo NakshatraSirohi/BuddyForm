@@ -18,17 +18,16 @@ const complaintSchema = new mongoose.Schema(
             enum: ["minor", "moderate", "major"], // Severity levels: minor, moderate, or major
             default: "minor",
         },
-        category: {
-            type: String,
-            
-            enum: [ "General Issue",
-                "Service Complaint",
-                "Late Response",
-                "Facilities Issue",
-                "academic",
-                "technical"
-            ], 
-            default: "other",
+        categories: {
+            type: [String],
+            required: true,
+            validate: {
+              validator: function (value) {
+                // Custom validation for categories to check that they're valid strings or allow "Other"
+                return value.every((category) => typeof category === 'string');
+              },
+              message: 'Invalid category',
+            },
         },
         upvotes: [
             {

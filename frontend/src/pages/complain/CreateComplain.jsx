@@ -3,37 +3,90 @@ import { BsEmojiSmileFill } from "react-icons/bs";
 import { useRef, useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import Button from "../../component/Button";
+import { useMutation,useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-hot-toast";
 
 const CreateComplain = () => {
-  const [title, setTitle] = useState(""); // State for complaint title
-  const [text, setText] = useState("");
-  const [img, setImg] = useState(null);
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [isOtherSelected, setIsOtherSelected] = useState(false);
-  const [otherCategory, setOtherCategory] = useState("");
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const imgRef = useRef(null);
-  const isPending = false;
-  const isError = false;
+  const [title, setTitle] = useState(""); 
+  const [text, setText] = useState(""); 
+  const [img, setImg] = useState(null); // State for image
+  const [selectedCategories, setSelectedCategories] = useState([]); // State for selected categories
+  const [isOtherSelected, setIsOtherSelected] = useState(false); // State to track "Other" category selection
+  const [otherCategory, setOtherCategory] = useState(""); // State for "Other" category input
+  const [dropdownOpen, setDropdownOpen] = useState(false); // State to toggle dropdown visibility
+  const imgRef = useRef(null); // Reference to the file input for image uploads
 
   const categories = [
-        "General Issue",
-        "Service Complaint",
-        "Late Response",
-        "Facilities Issue",
-        "academic",
-        "technical",
+    "General Issue",
+    "Service Complaint",
+    "Late Response",
+    "Facilities Issue",
+    "academic",
+    "technical",
   ];
 
+  useQuery({queryKey : ["authUser"]})
+	const queryClient = useQueryClient();
+
+  const {
+    mutate: createComplaint,
+    isPending,
+    isError,
+  } = useMutation({
+    mutationFn: async ({ title, text, img, categories }) => {
+      try {
+        
+        const res = await fetch("/api/complaints/create", {
+          method: "POST",
+          
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ title, text, img, categories }),
+        });
+        
+        console.log("Response Status:", res.status); 
+        const data = await res.json();
+        console.log("Response Data:", data); // Log response data
+        if (!res.ok) {
+          throw new Error(data.error || "Something went wrong while submitting the complaint.");
+        }
+
+        return data;
+      } catch (error) {
+        throw new Error(error.message || "An error occurred.");
+      }
+    },
+
+    onSuccess: () => {
+      
+      setTitle(""); // Reset title input
+      setText(""); // Reset text input
+      setImg(null); // Reset image
+      setSelectedCategories([]);
+
+      toast.success("Complaint submitted successfully");
+      queryClient.invalidateQueries({ queryKey: ["complaints"] }); 
+    },
+
+    onError: () => {
+      
+      toast.error("Failed to submit the complaint, please try again.");
+    },
+  });
+
   const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!title.trim()) {
-      alert("Please enter a title for your complaint.");
-      return;
-    }
-    alert("Complaint submitted successfully");
-    // Save the complaint to your backend here
-  };
+    e.preventDefault(); 
+
+    createComplaint({
+        title,
+        text,
+        img,
+        categories: selectedCategories,
+
+    });
+};
+
 
   const handleImgChange = (e) => {
     const file = e.target.files[0];
@@ -49,25 +102,32 @@ const CreateComplain = () => {
   const handleCategorySelect = (category) => {
     if (category === "Other") {
       setIsOtherSelected(true);
-      setSelectedCategories([]); // Clear categories if "Other" is selected
+      setSelectedCategories([]); // Reset selected categories when 'Other' is selected
     } else {
       if (!selectedCategories.includes(category)) {
         setSelectedCategories([...selectedCategories, category]);
       }
+      setDropdownOpen(false); // Close the dropdown after selection
     }
-    setDropdownOpen(false); // Close dropdown after selection
   };
-
+  
   const handleOtherSubmit = () => {
     if (otherCategory.trim()) {
-      setSelectedCategories([...selectedCategories, otherCategory.trim()]);
-      setIsOtherSelected(false);
-      setOtherCategory("");
+      // Validate custom category
+      const validCategory = /^[a-zA-Z0-9\s]+$/.test(otherCategory.trim());  // Example of simple validation
+      if (validCategory) {
+        setSelectedCategories([...selectedCategories, otherCategory.trim()]);
+        setIsOtherSelected(false);
+        setOtherCategory("");
+      } else {
+        toast.error("Please enter a valid category.");
+      }
     }
   };
-
-  const removeCategory = (category) => {
-    setSelectedCategories(selectedCategories.filter((cat) => cat !== category));
+  
+  
+  const removeCategory = (categories) => {
+    setSelectedCategories(selectedCategories.filter((cat) => cat !== categories));
   };
 
   return (
@@ -86,7 +146,7 @@ const CreateComplain = () => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        
+
         {/* Complaint Description */}
         <textarea
           className="textarea w-full ml-2 p-0 text-lg resize-none border-none focus:outline-none border-gray-800"
@@ -94,6 +154,7 @@ const CreateComplain = () => {
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
+
         {/* Dropdown for categories */}
         <div
           className="dropdown flex border-t border-t-gray-700 mt-2 relative"
@@ -113,15 +174,15 @@ const CreateComplain = () => {
                   className="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 shadow absolute"
                   onClick={(e) => e.stopPropagation()} // Prevent dropdown from closing on internal clicks
                 >
-                  {categories.map((category, index) => (
+                  {categories.map((categories, index) => (
                     <li key={index}>
                       <a
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleCategorySelect(category); // Add selected category
+                          handleCategorySelect(categories); // Add selected category
                         }}
                       >
-                        {category}
+                        {categories}
                       </a>
                     </li>
                   ))}
@@ -160,17 +221,18 @@ const CreateComplain = () => {
             </div>
           )}
         </div>
+
         {/* Selected categories displayed as hashtags */}
         <div className="flex flex-wrap gap-2 mt-2">
-          {selectedCategories.map((category, index) => (
+          {selectedCategories.map((categories, index) => (
             <span
               key={index}
               className="bg-gray-700 text-white px-2 py-1 rounded-full flex items-center gap-1 text-sm"
             >
-              #{category}
+              #{categories}
               <IoCloseSharp
                 className="cursor-pointer"
-                onClick={() => removeCategory(category)}
+                onClick={() => removeCategory(categories)}
               />
             </span>
           ))}
@@ -203,8 +265,14 @@ const CreateComplain = () => {
             />
             <BsEmojiSmileFill className="fill-info w-5 h-5 cursor-pointer" />
           </div>
-          <input type="file" accept="image/*" hidden ref={imgRef} onChange={handleImgChange} />
-          <Button className="animate-slideUp" href="/complain">
+          <input
+            type="file"
+            accept="image/*"
+            hidden
+            ref={imgRef}
+            onChange={handleImgChange}
+          />
+          <Button className="animate-slideUp">
             {isPending ? "Submitting..." : "Submit Complaint"}
           </Button>
         </div>
