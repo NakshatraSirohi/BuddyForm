@@ -9,12 +9,12 @@ import { toast } from "react-hot-toast";
 const CreateComplain = () => {
   const [title, setTitle] = useState(""); 
   const [text, setText] = useState(""); 
-  const [img, setImg] = useState(null); // State for image
+  const [img, setImg] = useState(null);
   const [selectedCategories, setSelectedCategories] = useState([]); // State for selected categories
   const [isOtherSelected, setIsOtherSelected] = useState(false); // State to track "Other" category selection
   const [otherCategory, setOtherCategory] = useState(""); // State for "Other" category input
   const [dropdownOpen, setDropdownOpen] = useState(false); // State to toggle dropdown visibility
-  const imgRef = useRef(null); // Reference to the file input for image uploads
+  const imgRef = useRef(null);
 
   const categories = [
     "General Issue",
