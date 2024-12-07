@@ -21,7 +21,13 @@ const complaintSchema = new mongoose.Schema(
         category: {
             type: String,
             
-            enum: ["academic", "administrative", "infrastructure", "other"], // Example categories
+            enum: [ "General Issue",
+                "Service Complaint",
+                "Late Response",
+                "Facilities Issue",
+                "academic",
+                "technical"
+            ], 
             default: "other",
         },
         upvotes: [

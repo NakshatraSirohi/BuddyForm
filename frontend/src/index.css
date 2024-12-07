@@ -24,7 +24,7 @@
 @layer components {
     input::placeholder {
       @apply text-gray-400;      
-      font-size: small;
+      
     }
   
     textarea::placeholder {

@@ -69,6 +69,7 @@ export const submitComplaint = async (req, res) => {
             complaint: newComplaint,
         });
     } catch (error) {
+        
         console.error("Error in submitComplaint controller:", error.message);
         res.status(500).json({ error: "Internal server error" });
     }

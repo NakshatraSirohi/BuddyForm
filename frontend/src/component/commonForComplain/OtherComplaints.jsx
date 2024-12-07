@@ -33,7 +33,7 @@ const OtherComplaints = ({ feedType }) => {
         const res = await fetch(Complain_EndPoint);
         const data = await res.json();
 
-        console.log("Fetched Data:", data); 
+        // console.log("Fetched Data:", data); 
 
         if (!res.ok) {
           throw new Error(data.error || "Something went wrong");
@@ -41,7 +41,9 @@ const OtherComplaints = ({ feedType }) => {
 
         return data;  
       } catch (error) {
+
         console.error("Error fetching complaints:", error);
+
         throw error; // Rethrow error for React Query
       }
     },

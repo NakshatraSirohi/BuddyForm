@@ -5,6 +5,7 @@ import { IoCloseSharp } from "react-icons/io5";
 import Button from "../../component/Button";
 
 const CreateComplain = () => {
+  const [title, setTitle] = useState(""); // State for complaint title
   const [text, setText] = useState("");
   const [img, setImg] = useState(null);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -16,16 +17,20 @@ const CreateComplain = () => {
   const isError = false;
 
   const categories = [
-    "General Issue",
-    "Technical Problem",
-    "Service Complaint",
-    "Late Response",
-    "Facilities Issue",
-    "Behavioral Issue",
+        "General Issue",
+        "Service Complaint",
+        "Late Response",
+        "Facilities Issue",
+        "academic",
+        "technical",
   ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!title.trim()) {
+      alert("Please enter a title for your complaint.");
+      return;
+    }
     alert("Complaint submitted successfully");
     // Save the complaint to your backend here
   };
@@ -73,8 +78,18 @@ const CreateComplain = () => {
         </div>
       </div>
       <form className="flex flex-col gap-2 w-full" onSubmit={handleSubmit}>
+        {/* Title Input Section */}
+        <input
+          type="text"
+          className="w-full p-2 mb-2  text-lg focus:outline-none border-b border-gray-800 bg-transparent placeholder-gray-500"
+          placeholder="Enter the title..."
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        
+        {/* Complaint Description */}
         <textarea
-          className="textarea w-full p-0 text-lg resize-none border-none focus:outline-none border-gray-800"
+          className="textarea w-full ml-2 p-0 text-lg resize-none border-none focus:outline-none border-gray-800"
           placeholder="Describe your complaint..."
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -102,7 +117,7 @@ const CreateComplain = () => {
                     <li key={index}>
                       <a
                         onClick={(e) => {
-                          e.stopPropagation(); 
+                          e.stopPropagation();
                           handleCategorySelect(category); // Add selected category
                         }}
                       >
@@ -113,7 +128,7 @@ const CreateComplain = () => {
                   <li>
                     <a
                       onClick={(e) => {
-                        e.stopPropagation(); 
+                        e.stopPropagation();
                         handleCategorySelect("Other"); // Select "Other"
                       }}
                     >
@@ -180,7 +195,7 @@ const CreateComplain = () => {
         )}
 
         {/* Buttons */}
-        <div className="flex justify-between border-t  py-2 border-t-gray-700 mt-4">
+        <div className="flex justify-between border-t py-2 border-t-gray-700 mt-4">
           <div className="flex gap-1 items-center">
             <CiImageOn
               className="fill-info w-6 h-6 cursor-pointer"
