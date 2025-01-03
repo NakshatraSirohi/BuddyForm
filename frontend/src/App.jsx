@@ -8,6 +8,8 @@ import LoadingSpinner from "./component/commonForComplain/LoadingSpinner";
 // Import pages
 import Home from "./pages/homePage/Home";
 import Login from "./pages/auth/LoginPage";
+import ForgetPassword from "./pages/auth/ForgetPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
 import SignUp from "./pages/auth/SignUp";
 import Complain from "./pages/complain/Complain";
 import Contact from "./pages/Contact";
@@ -87,6 +89,8 @@ const App = () => {
               <Route path="/" element={<Home />} /> 
               <Route path="/login" element={!authUser? <Login />:<Navigate to="/complain"/>} /> 
               <Route path="/signup" element={!authUser?<SignUp />:<Navigate to="/login"/>} /> 
+              <Route path="/forgetPassword" element={<ForgetPassword />} /> 
+              <Route path="/resetPassword/:token" element={<ResetPassword />} />
               <Route path="/contact" element={<Contact />} /> 
               <Route path="/notes" element={<Notes />} /> 
               <Route path="/app" element={<AppLink />} />

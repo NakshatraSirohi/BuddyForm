@@ -13,21 +13,21 @@ const notificationSchema = new mongoose.Schema({
     },
     complaint: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Complaint', // Reference to the complaint this notification is related to
+        ref: 'Complaint',
     },
     message: {
         type: String,
-        required: true, // Add this if you plan to store specific notification text
-        minlength: 5,  // Optional: Minimum length for message
+        required: true,
+        minlength: 5,
     },
     type: {
         type: String, 
         required: true,
-        enum: ['status', 'upvote'], // Notification types: status change or upvote
+        enum: ['status', 'upvote'],
     },
     read: {
         type: Boolean,
-        default: false, // Defaults to unread
+        default: false,
     },
     expiresAt: {
         type: Date,
@@ -36,11 +36,8 @@ const notificationSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-// Add index to optimize queries on from, to, and read fields
+// Add an index to optimize queries on from, to, and read fields
 notificationSchema.index({ from: 1, to: 1, read: 1 });
-
-// Ensure TTL index works for expiry
-notificationSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 const Notification = mongoose.model('Notification', notificationSchema);
 export default Notification;

@@ -1,30 +1,38 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
-    rollNo: {
-        type: String,
-        required: true,
-        unique: true,
-        match: /^2301430100\d{3}$/, // 13 digits starting with 2301430100
+const userSchema = new mongoose.Schema(
+    {
+        rollNo: {
+            type: String,
+            required: true,
+            unique: true,
+            match: /^2301430100\d{3}$/, // 13 digits starting with 2301430100
+        },
+        fullName: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+        password: {
+            type: String,
+            required: true,
+            minlength: 6,
+        },
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+            lowercase: true,
+            trim: true,
+        },
+        resetPasswordToken: String,
+        resetPasswordExpiry: {
+            type: Date,
+            index: true, // Ensure there's no duplicate TTL definition elsewhere
+        },
     },
-    fullName: {
-        type: String,
-        required: true,
-        trim: true,
-    },
-    password: {
-        type: String,
-        required: true,
-        minlength: 6,
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        lowercase: true,
-        trim: true,
-    },
-}, { timestamps: true });
+    { timestamps: true }
+);
 
 const User = mongoose.model("User", userSchema);
 
