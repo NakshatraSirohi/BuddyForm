@@ -83,6 +83,7 @@ A project designed to empower students by providing an anonymous platform to voi
    ```bash
    npm install nodejs
    npm install express mongoose jsonwebtoken bcryptjs dotenv cors cookie-parser cloudinary
+   npm install cross-env --save-dev
    npm install nodemailer
 
    ```
