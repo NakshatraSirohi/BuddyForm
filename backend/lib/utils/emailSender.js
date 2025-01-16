@@ -17,6 +17,12 @@ transporter.verify((error, success) => {
         console.log('Email configuration is working!');
     }
 });
+const severityEmailMap = {
+    low: "ojhaneha00028@gmail.com",
+    medium: "buddyForum6@gmail.com",
+    high: "high-coordinator@example.com",
+    critical: "critical-coordinator@example.com",
+};
 
 // Function to send emails
 export const sendEmail = async (to, subject, html) => {

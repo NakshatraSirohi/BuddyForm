@@ -35,8 +35,9 @@ const LoginPage = () => {
 		onSuccess: () => {
 			// Refetch the auth user
 			queryClient.invalidateQueries({ queryKey: ["authUser"] });
-			navigate("/dashboard"); // Redirect after successful login
+			navigate("/complain");
 		},
+		
 	});
 
 	const handleSubmit = (e) => {
@@ -51,7 +52,7 @@ const LoginPage = () => {
 	return (
 		<div className="max-w-screen-xl mx-auto mt-0 flex h-screen px-10">
 			<div className="flex-1 hidden lg:flex items-center justify-center">
-				<Link to="/">
+				<Link to="/complain">
 					<img
 						className="w-full h-full object-cover"
 						src={fevicon1}
