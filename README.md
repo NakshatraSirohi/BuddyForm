@@ -103,7 +103,7 @@ A project designed to empower students by providing an anonymous platform to voi
    cd BuddyFormApp
    ```
 2. Open the project in Android Studio.
-3. Build and run the application on an emulator or any android device.
+3. Build and run the application on an emulator or any android device by usb cable.
 
 ---
 
