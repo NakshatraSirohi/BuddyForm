@@ -95,15 +95,27 @@ A project designed to empower students by providing an anonymous platform to voi
 4. Open the application in your browser:  
    `http://localhost:3000`
 
+Sure thing! Here's the updated version with the additional choice:
+
 ### 📱 **Android App**:
+
+1. Download the APK file 
+<br>
+https://github.com/Robin-Kumar-rk/BuddyForumApp/blob/main/app/release/app-release.apk.
+2. Install in your android device and run.
+
+Or
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Robin-Kumar-rk/BuddyFormApp.git
+   git clone https://github.com/Robin-Kumar-rk/BuddyForumApp.git
    cd BuddyFormApp
    ```
 2. Open the project in Android Studio.
-3. Build and run the application on an emulator or any android device by usb cable.
+3. Build and run the application on an emulator or any android device by USB cable by enabling USB debugging.
+
+
+
 
 ---
 
